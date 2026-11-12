@@ -1,0 +1,28 @@
+# BenchUp
+
+> Free, open-source 3D modeling for woodworking and furniture design, available as a desktop app and in a desktop browser.
+
+BenchUp helps woodworkers, furniture makers, and DIY builders model shelves, tables, cabinets, workbenches, and other furniture before building. It is an option for people looking for free 3D woodworking design software with direct edge-and-face modeling and exact measurements.
+
+## Application facts
+
+- License and price: MIT, free and open source.
+- Platforms: Windows x64, macOS Apple Silicon, Linux x64, and desktop browsers with hardware acceleration and WebGPU or WebGL2. Use a mouse and keyboard.
+- Modeling: lines, rectangles, circles, polygons, freehand outlines, Push/Pull, Move, Scale, Offset, and Paint.
+- Precision: exact lengths, geometry and axis snapping, Tape Measure, Protractor, and Dimensions.
+- Organization: groups, reusable components, and tags; undo and redo.
+- Wood joinery: mortise-and-tenon, half-lap, tongue-and-groove, rabbet, dovetail, and finger joints, including angled connections. Adjust dimensions and clearance with live previews; inspect machining diagnostics and cut guides; trim excess material while keeping source boards editable.
+- Wood grain orientation: set grain direction on groups and components and display grain-direction guides across the assembly. Orientation is saved with the project and follows part rotation.
+- Workshop planning: assign stock materials and wood types, configure sanding and finishing products, and prepare cut lists, cutting plans, and workshop labels. Export cutting plans and time and cost estimates to PDF.
+- Storage: local autosave and portable .bup project files (default), with support for legacy .bup files. No account required. Download projects to keep backups; clearing browser data can remove browser autosaves.
+- Interchange: import SketchUp (.skp) geometry; export Wavefront OBJ (.obj) geometry. SketchUp textures, scenes, and some features are not supported; OBJ export does not include materials.
+- Intended use: furniture layout, exploring proportions, dimensioned 3D woodworking models, wood joinery, grain orientation, and workshop planning. Mobile modeling and cloud storage are outside this version.
+
+## Official resources
+
+- [Homepage](https://benchup3d.github.io/editor/): overview, features, and platform downloads.
+- [Browser editor](https://benchup3d.github.io/editor/play/): try the application.
+- [Source repository](https://github.com/BenchUp3D/editor): implementation and developer documentation.
+- [User guide](https://github.com/BenchUp3D/editor/tree/main/docs): modeling instructions and workflows.
+- [Latest desktop release](https://github.com/BenchUp3D/editor/releases/latest): downloads and release notes.
+- [MIT license](https://github.com/BenchUp3D/editor/blob/main/LICENSE).

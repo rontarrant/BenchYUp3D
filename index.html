@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#d94836" />
+    <meta name="description" content="BenchUp — a precise little space for your next big idea. A Rust 3D modeler for desktop and web." />
+    <title>BenchUp</title>
+    <script>
+      // Match theme.rs before the loading screen paints; other values follow the system.
+      try {
+        const preference = (localStorage.getItem("benchup.theme.v1") ?? localStorage.getItem("ketchup.theme.v1"));
+        if (preference === "light" || preference === "dark") {
+          document.documentElement.dataset.theme = preference;
+        }
+      } catch {
+        // Storage may be unavailable; the system color scheme still applies.
+      }
+    </script>
+    <link data-trunk rel="rust" href="crates/benchup-app/Cargo.toml" data-bin="benchup-app" />
+    <link data-trunk rel="copy-dir" href="assets/branding" data-target-path="assets/branding" />
+    <link data-trunk rel="copy-dir" href="assets/i18n" data-target-path="assets/i18n" />
+    <link rel="icon" type="image/x-icon" href="assets/branding/favicon.ico" sizes="16x16 32x32 48x48 64x64 128x128 256x256" />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/branding/icon-32.png" />
+    <link rel="icon" type="image/svg+xml" sizes="any" href="assets/branding/logo.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/branding/apple-touch-icon.png" />
+    <link rel="manifest" href="assets/branding/site.webmanifest" />
+    <style>
+      :root { color-scheme: light; --background: #f0f2ea; --ink: #27352e; --accent: #d94836; }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) { color-scheme: dark; --background: #272f29; --ink: #e5eae2; --accent: #f68e7d; }
+      }
+      :root[data-theme="dark"] { color-scheme: dark; --background: #272f29; --ink: #e5eae2; --accent: #f68e7d; }
+      html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: var(--background); font-family: system-ui, sans-serif; }
+      canvas { position: absolute; inset: 0; width: 100%; height: 100%; outline: none; }
+      #loading { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; text-align: center; color: var(--ink); background: var(--background); }
+      #loading img { width: 72px; height: 72px; margin-bottom: 18px; }
+      .loading-progress { width: 200px; height: 4px; margin-top: 12px; overflow: hidden; border-radius: 2px; background: color-mix(in srgb, var(--ink) 15%, transparent); }
+      .loading-progress::after { content: ""; display: block; width: 40%; height: 100%; border-radius: inherit; background: var(--accent); animation: loading-progress 1.3s ease-in-out infinite; }
+      #loading strong { font-size: 32px; letter-spacing: -1.5px; }
+      #loading strong span { color: var(--accent); }
+      #loading p { font-size: 14px; opacity: .7; max-width: 420px; line-height: 1.6; padding: 0 24px; }
+      @keyframes loading-progress { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
+      @media (prefers-reduced-motion: reduce) {
+        .loading-progress::after { animation: none; width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="benchup-workspace">
+      <canvas id="benchup-canvas" tabindex="0"></canvas>
+    </div>
+    <script id="workspace-shortcuts">
+      (() => {
+        const workspace = document.getElementById("benchup-workspace");
+        const canvas = document.getElementById("benchup-canvas");
+        // Cancel browser gestures only for contacts that begin in a model pane.
+        // Keep egui's event propagation and sidebar/text-input gestures intact.
+        const modelTouches = new Set();
+        const inModelPane = (touch) => {
+          const bounds = canvas.getBoundingClientRect();
+          const x = (touch.clientX - bounds.left) * canvas.clientWidth / bounds.width;
+          const y = (touch.clientY - bounds.top) * canvas.clientHeight / bounds.height;
+          const rects = JSON.parse(canvas.getAttribute("data-model-viewports") || "[]");
+          return rects.some(([left, top, right, bottom]) =>
+            x >= left && x <= right && y >= top && y <= bottom);
+        };
+        canvas.addEventListener("touchstart", (event) => {
+          for (const touch of event.changedTouches) {
+            if (inModelPane(touch)) modelTouches.add(touch.identifier);
+          }
+          if (modelTouches.size) event.preventDefault();
+        }, { capture: true, passive: false });
+        canvas.addEventListener("touchmove", (event) => {
+          if (modelTouches.size) event.preventDefault();
+        }, { capture: true, passive: false });
+        for (const type of ["touchend", "touchcancel"]) {
+          canvas.addEventListener(type, (event) => {
+            if (modelTouches.size) event.preventDefault();
+            for (const touch of event.changedTouches) modelTouches.delete(touch.identifier);
+          }, { capture: true, passive: false });
+        }
+        window.addEventListener("blur", () => modelTouches.clear());
+        // Never change the user's window mode for Walk. Keyboard Lock is only
+        // effective in existing API fullscreen; ordinary tabs retain browser-
+        // reserved shortcuts such as Ctrl+W. Pointer Lock works in a window.
+        let captureVersion = 0;
+        const isWalking = () => canvas.dataset.walkActive === "true";
+        const captureState = () => canvas.dataset.walkKeyboardCapture || "idle";
+        const setCaptureState = state => { canvas.dataset.walkKeyboardCapture = state; };
+        let pointerVersion = 0;
+        const pointerState = () => canvas.dataset.walkPointerCapture || "idle";
+        const clearMouseMotion = () => {
+          canvas.dataset.walkLookX = "0";
+          canvas.dataset.walkLookY = "0";
+        };
+        const releaseWalkPointer = () => {
+          ++pointerVersion;
+          canvas.dataset.walkPointerCapture = "idle";
+          clearMouseMotion();
+          if (document.pointerLockElement === canvas) document.exitPointerLock();
+        };
+        const releaseWalkKeyboard = () => {
+          ++captureVersion;
+          releaseWalkPointer();
+          navigator.keyboard?.unlock?.();
+          setCaptureState("idle");
+        };
+        const exitWalkFromBrowser = () => {
+          if (isWalking()) {
+            canvas.dataset.walkExitRequested = "true";
+            // Wake eframe even when the browser consumed the real Escape key.
+            for (const type of ["keydown", "keyup"]) {
+              canvas.dispatchEvent(new KeyboardEvent(type, {
+                key: "Escape", code: "Escape", bubbles: true,
+              }));
+            }
+          }
+          releaseWalkKeyboard();
+        };
+        const captureWalkPointer = async () => {
+          if (!isWalking() || ["pending", "locked"].includes(pointerState())) return;
+          if (!canvas.requestPointerLock) {
+            canvas.dataset.walkPointerCapture = "unavailable";
+            return;
+          }
+          const version = ++pointerVersion;
+          canvas.dataset.walkPointerCapture = "pending";
+          clearMouseMotion();
+          try {
+            // Older browsers return void and report success through events.
+            const result = canvas.requestPointerLock();
+            if (result?.then) await result;
+            if (version !== pointerVersion || !isWalking()) {
+              if (!isWalking() || canvas.dataset.walkPlaced !== "true"
+                  || canvas.dataset.walkInputEnabled !== "true") releaseWalkPointer();
+              return;
+            }
+            if (document.pointerLockElement === canvas) {
+              canvas.dataset.walkPointerCapture = "locked";
+              if (canvas.dataset.walkInputEnabled === "true") canvas.focus({ preventScroll: true });
+            }
+          } catch {
+            if (version === pointerVersion && isWalking()) canvas.dataset.walkPointerCapture = "unavailable";
+          }
+        };
+        document.addEventListener("pointerlockchange", () => {
+          if (document.pointerLockElement === canvas) {
+            if (isWalking() && (pointerState() === "pending" || canvas.dataset.walkPlaced === "true")) {
+              clearMouseMotion();
+              canvas.dataset.walkPointerCapture = "locked";
+            } else { releaseWalkPointer(); }
+          } else if (pointerState() === "locked") {
+            // Browser Escape may unlock the pointer without sending Escape to
+            // eframe. Exit Walk and restore the pre-walk camera in that case.
+            exitWalkFromBrowser();
+          }
+        });
+        document.addEventListener("pointerlockerror", () => {
+          if (pointerState() === "pending") canvas.dataset.walkPointerCapture = "unavailable";
+        });
+        document.addEventListener("mousemove", event => {
+          if (document.pointerLockElement !== canvas || !isWalking()
+              || canvas.dataset.walkPlaced !== "true" || canvas.dataset.walkInputEnabled !== "true") return;
+          for (const [key, movement] of [["walkLookX", event.movementX], ["walkLookY", event.movementY]]) {
+            if (Number.isFinite(movement)) {
+              canvas.dataset[key] = String((Number(canvas.dataset[key]) || 0) + movement);
+            }
+          }
+        }, { capture: true });
+        const captureWalkKeyboard = async () => {
+          if (!isWalking() || ["pending", "locked"].includes(captureState())) return;
+          if (!navigator.keyboard?.lock || !document.fullscreenElement) {
+            setCaptureState("unavailable");
+            return;
+          }
+          const version = ++captureVersion;
+          setCaptureState("pending");
+          const cancelled = () => version !== captureVersion || !isWalking();
+          const cleanCancelled = () => {
+            if (!isWalking()) {
+              navigator.keyboard.unlock();
+            }
+          };
+          try {
+            // Leave Escape unlocked so the browser's normal exit still works.
+            await navigator.keyboard.lock(["KeyW", "KeyA", "KeyS", "KeyD"]);
+            if (cancelled()) { cleanCancelled(); return; }
+            if (canvas.dataset.walkInputEnabled === "true") canvas.focus({ preventScroll: true });
+            setCaptureState("locked");
+          } catch {
+            if (!cancelled()) setCaptureState("unavailable");
+          }
+        };
+        canvas.addEventListener("pointerup", event => {
+          if (event.button === 0 && isWalking()
+              && canvas.dataset.walkInputEnabled === "true" && inModelPane(event)) {
+            void captureWalkPointer();
+            void captureWalkKeyboard();
+          }
+        }, { capture: true });
+        new MutationObserver(() => {
+          if (!isWalking()) releaseWalkKeyboard();
+          else if (canvas.dataset.walkPlaced !== "true"
+              || (canvas.dataset.walkInputEnabled !== "true" && pointerState() === "locked")) releaseWalkPointer();
+        }).observe(canvas, { attributes: true, attributeFilter: ["data-walk-active", "data-walk-input-enabled", "data-walk-placed"] });
+        document.addEventListener("fullscreenchange", () => {
+          if (!document.fullscreenElement && captureState() === "locked") {
+            ++captureVersion;
+            navigator.keyboard?.unlock?.();
+            setCaptureState("unavailable");
+          }
+        });
+        window.addEventListener("blur", () => {
+          if (captureState() === "locked" || pointerState() === "locked") exitWalkFromBrowser();
+        });
+        window.addEventListener("pagehide", releaseWalkKeyboard);
+        // Keep these in sync with BenchUpApp::keyboard in app.rs. eframe only
+        // cancels a subset of browser shortcuts, even with should_prevent_default.
+        const commandKeys = new Set(["a", "f", "n", "o", "s", "y", "z"]);
+        const canvasKeys = new Set([
+          " ", "a", "b", "c", "d", "e", "f", "g", "i", "l", "m",
+          "o", "p", "q", "r", "s", "t", "w", "ArrowDown", "ArrowLeft",
+          "ArrowRight", "ArrowUp", "Backspace", "Delete", "Enter", "Tab",
+        ]);
+        workspace.addEventListener("keydown", (event) => {
+          if (event.isComposing || event.getModifierState("AltGraph")) return;
+          // Match eframe's logical key, with a physical fallback for layouts
+          // whose characters do not map to an egui key.
+          let key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
+          if (!/^[a-z]$/.test(key) && /^Key[A-Z]$/.test(event.code)) {
+            key = event.code.slice(3).toLowerCase();
+          }
+          const command = event.ctrlKey || event.metaKey;
+          // Keep Walk modifiers and movement in the canvas, including Shift
+          // for crouching, while still delivering every event to eframe.
+          const walking = event.target === canvas && canvas.dataset.walkActive === "true";
+          const walkKey = ["w", "a", "s", "d", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " ", "Alt", "Shift", "Control"].includes(key);
+          // Do not cancel C/X/V: their default action delivers the native
+          // clipboard events consumed (and cancelled) by eframe.
+          if ((walking && walkKey) || (command && commandKeys.has(key))
+              || (!command && (key === "F1" || key === "Escape"))
+              || (!command && event.target === canvas && canvasKeys.has(key))) {
+            event.preventDefault();
+          }
+          // Leave propagation intact so eframe still receives the shortcut.
+        }, { capture: true, passive: false });
+        // eframe inserts its text input beside the canvas inside this wrapper,
+        // so command shortcuts are also protected while editing app text.
+      })();
+    </script>
+    <div id="loading">
+      <img src="assets/branding/logo.svg" alt="" width="72" height="72" />
+      <strong>BenchUp<span>.</span></strong>
+      <p id="loading-label" role="status"></p>
+      <div class="loading-progress" role="progressbar" aria-labelledby="loading-label"></div>
+    </div>
+    <script id="startup-messages">
+      fetch("assets/i18n/en.json")
+        .then(response => response.ok ? response.json() : null)
+        .then(messages => {
+          if (!messages) return;
+          document.getElementById("benchup-canvas")
+            .setAttribute("aria-label", messages["web.canvas_label"]);
+          // The app owns the title and any error as soon as it leaves the loading screen.
+          const loading = document.getElementById("loading-label");
+          if (!loading) return;
+          document.title = messages["web.initial_title"];
+          const phrases = Object.keys(messages).filter(key => key.startsWith("web.loading."));
+          loading.textContent = messages[phrases[Math.floor(Math.random() * phrases.length)]];
+        })
+        .catch(() => {}); // Loading the application is independent of this request.
+    </script>
+  </body>
+</html>

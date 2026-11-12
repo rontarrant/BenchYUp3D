@@ -1,0 +1,13 @@
+/target/
+/dist/
+/.local/
+
+/.env
+
+/BenchUp.AppDir/
+/packaging-tools/
+*.AppImage
+*.log
+
+__pycache__/
+*.pyc

@@ -1,0 +1,438 @@
+[
+  {
+    "version": "0.6.6",
+    "date": "2026-11-08",
+    "title": "BenchUp, workshop labels, and faster modeling",
+    "sections": [
+      {
+        "title": "Meet BenchUp",
+        "changes": [
+          "KetchUp is now BenchUp, with updated branding and .bup project files. Existing projects, saved data, preferences, and desktop updates remain compatible.",
+          "Explore the refreshed website and woodworking documentation for joinery, grain orientation, materials, cutting plans, and estimates."
+        ]
+      },
+      {
+        "title": "Woodworking and workshop reports",
+        "changes": [
+          "Set wood grain direction with a snapped two-point gesture and axis locks. Grain orientation stays with parts and linked components, with optional surface and end-grain guides at consistent physical spacing.",
+          "Export printable A4 workshop labels from Tools, with one label per physical piece, cutting-plan marks, and finished dimensions.",
+          "Include whole-project joinery in sidebar and PDF time estimates, with adjustable, remembered time allowances for each joint type.",
+          "Find the joint creation action under the clearer Create joinery label."
+        ]
+      },
+      {
+        "title": "Navigation and modeling",
+        "changes": [
+          "Walk through models at eye level with body collisions, steps, slopes, crouching, jumping, and sitting. Adjust person dimensions, walking speed, and look sensitivity with remembered settings.",
+          "Toggle Push/Pull new-face mode with Ctrl to keep the starting face and create a new cap and walls. The mode is remembered across reloads and restarts.",
+          "Choose Settings → Tools → Automatically group new shapes to enable automatic grouping. New installations leave it off, and the preference is saved immediately.",
+          "Import small and warped SketchUp faces more reliably while preserving holes, colors, groups, and positions.",
+          "Recognize Move, Push/Pull, and Rotate more easily with clearer toolbar arrows."
+        ]
+      },
+      {
+        "title": "Performance and project storage",
+        "changes": [
+          "Improve large-model responsiveness with retained GPU geometry and shadows, faster selection overlays, indexed picking and snapping, and background selection measurements on desktop and in the browser.",
+          "Speed up edits inside groups, connected drawing, erasing, undo and redo, and inspector and Outliner updates.",
+          "Save compressed project files while continuing to open legacy uncompressed files with undo history intact. Autosave records incremental edit checkpoints to reduce work after each change."
+        ]
+      }
+    ]
+  },
+  {
+    "version": "0.6.5",
+    "date": "2026-11-07",
+    "title": "Editable construction guides and angled wood joints",
+    "sections": [
+      {
+        "title": "Construction guides",
+        "changes": [
+          "Create persistent cyan construction guides with Tape Measure and Protractor, with precise distance or angle entry and live previews. Tape Measure guides follow the tape line through both picked points.",
+          "Snap drawing tools to guides and their intersections. Select guides by clicking or box selection, then move, rotate, group, copy, hide, lock, or delete them with undo and redo support.",
+          "Tap Ctrl or Command to switch between Create Guides and Measure only; the choice is remembered across reloads and restarts. Use View → Guides to control visibility and snapping, or Edit → Delete Guides to remove all guides."
+        ]
+      },
+      {
+        "title": "Wood joinery",
+        "changes": [
+          "Create joints between angled boards and preview the resulting geometry while adjusting joint settings.",
+          "Trim excess board material past a joint, choosing the board, trim direction, and end to keep, with live previews."
+        ]
+      },
+      {
+        "title": "Workspace and reports",
+        "changes": [
+          "Choose whether axis locks reset after each action in Settings → Controls → Tools; the preference is saved immediately and remembered across restarts.",
+          "Find modeling commands more easily with updated menu and toolbar icons, clearer selection framing, and a larger project title.",
+          "Export Time & Cost Estimates directly from the Tools menu."
+        ]
+      },
+      {
+        "title": "Desktop compatibility",
+        "changes": [
+          "Restore desktop build compatibility while keeping browser-specific project handling on WebAssembly."
+        ]
+      }
+    ]
+  },
+  {
+    "version": "0.6.4",
+    "date": "2026-11-06",
+    "title": "Smoother modeling and fork-aware releases",
+    "sections": [
+      {
+        "title": "Modeling and viewports",
+        "changes": [
+          "Use geometry at different heights to define a rotation angle while preserving the locked rotation plane and snapping options.",
+          "Fix Ctrl toggling Move copies in the browser, including Linux; use /5 or *5 after placing a copy to divide or repeat it.",
+          "Append new viewports to the end of the tab list."
+        ]
+      },
+      {
+        "title": "Workspace",
+        "changes": [
+          "Use normal scrolling in the left toolbar when the tools do not all fit; otherwise use the wheel to switch tools.",
+          "Show only the green insertion indicator when joining an existing inspector area, reserving the area highlight for new splits.",
+          "Expand inspector split targets to 15 pixels and double automatic scrolling speed while dragging sections.",
+          "Remove individual entries from Recent Projects without deleting their files."
+        ]
+      },
+      {
+        "title": "Releases and forks",
+        "changes": [
+          "Use the building repository for desktop update feeds, including fork releases and local GitHub origin remotes.",
+          "Resolve website repository links from the publishing repository and synchronize README links for forks and custom Pages domains.",
+          "Use the same current screenshot in the README, website, and sharing previews."
+        ]
+      }
+    ]
+  },
+  {
+    "version": "0.6.3",
+    "date": "2026-11-06",
+    "title": "Clearer Move snapping and faster tool navigation",
+    "sections": [
+      {
+        "title": "Move and snapping",
+        "changes": [
+          "Automatically show unselected geometry in X-Ray while Move has a selection, whether selected before or after activating the tool.",
+          "Snap moving geometry to corners behind faces, including intermediate corners of recesses created with Push Pull."
+        ]
+      },
+      {
+        "title": "Workspace",
+        "changes": [
+          "Use the mouse wheel over the left toolbar to select the previous or next tool, keeping remembered tool choices."
+        ]
+      }
+    ]
+  },
+  {
+    "version": "0.6.2",
+    "date": "2026-11-06",
+    "title": "Precise rotation with flexible pivots",
+    "sections": [
+      {
+        "title": "Modeling and rotation",
+        "changes": [
+          "Rotate selected geometry with the new Rotate tool below Move, using Q by default or a custom shortcut.",
+          "Choose a pivot on or away from the selection, set a reference point, and preview the rotation with geometry and grid snapping. Use arrow keys to lock the rotation plane.",
+          "Enter precise angles or formulas in the selected angle unit, or specify degrees, radians, or gradians explicitly. Rotation supports undo and redo.",
+          "Preserve rotated component orientations through shared edits, scaling, reflection, copying, and project reloads."
+        ]
+      },
+      {
+        "title": "Workspace and preferences",
+        "changes": [
+          "Remember the Rotate tool and its axis and plane locks across restarts, even without a model edit.",
+          "Keep existing custom keyboard shortcuts when adding Rotate, choosing an available shortcut if Q is already assigned."
+        ]
+      }
+    ]
+  },
+  {
+    "version": "0.6.1",
+    "date": "2026-11-06",
+    "title": "Clearer measurements and scoped joinery",
+    "sections": [
+      {
+        "title": "Properties and workspace",
+        "changes": [
+          "Inspect selected edge lengths and face perimeters in Properties.",
+          "New inspector layouts place Properties first and Outliner second, both expanded, with other sections collapsed. Existing saved layouts and disclosure choices are preserved.",
+          "Add breathing room below Outliner contents for easier scrolling and selection.",
+          "Enable the grid and wood joinery display by default while preserving saved visibility choices."
+        ]
+      },
+      {
+        "title": "Wood joinery",
+        "changes": [
+          "Show joinery icons, machining, and guides for the immediate children of the group being edited. Opening a board exposes its original stock geometry.",
+          "Restore the assembled joinery overview when returning to the model root, while preserving saved connections and fully assembled export geometry."
+        ]
+      }
+    ]
+  },
+  {
+    "version": "0.6.0",
+    "date": "2026-11-03",
+    "title": "Woodworking joinery and connected projects",
+    "sections": [
+      {
+        "title": "Joinery and woodworking",
+        "changes": [
+          "Create and edit wood joints and connections in dedicated inspector sections, with joint previews, machining diagnostics, and cut guides.",
+          "Apply stock materials to descendant parts, choose wood types with searchable selectors, and customize sanding grits.",
+          "Export time and cost estimates to PDF. All PDF reports now share a branded header with the project name and generation date."
+        ]
+      },
+      {
+        "title": "Projects, sharing, and file formats",
+        "changes": [
+          "Save undo and redo history with projects and autosave, navigate document history, and access Undo and Redo from the app bar.",
+          "Reopen recent projects and use account, project-sharing, and real-time collaboration controls when an account server is configured.",
+          "Import STL and OBJ meshes and DXF profiles, and export STL files alongside the existing SketchUp import and OBJ export.",
+          "Preserve screenshot display settings, transparency, and framing when exporting images."
+        ]
+      },
+      {
+        "title": "Modeling and navigation",
+        "changes": [
+          "Use consistent modeling anchors and combined snapping across drawing, transform, measurement, and text tools, with remembered axis and plane locks.",
+          "Improve drawing groups, extrusion, and offset behavior, keep scaling near the center stable at different zoom levels, and clean up duplicate geometry and aligned vertices.",
+          "Pan with two fingers and pinch to zoom on touch devices. Display group labels in the viewport and align section planes with the active axes.",
+          "Adjust section cuts with multi-axis handles and configure finite grid dimensions, fading grids, and sun-direction cues."
+        ]
+      },
+      {
+        "title": "Workspace and performance",
+        "changes": [
+          "Remember dialog sizes and positions, resize from every edge and corner, and use searchable selectors and consistently centered inspector tables.",
+          "Refine Appearance and Color controls, tool highlighting, loading feedback, and inspector icons. Automatic Fasteners controls and previews are temporarily hidden.",
+          "Improve shadow boundaries, occlusion, and edge depth, and fade distant axes for clearer models.",
+          "Speed up viewport geometry and rendering with parallel work and caches for machining, joinery diagnostics, picking, and Outliner data. Enable per-viewport FPS diagnostics in Settings.",
+          "Send feature suggestions and issue reports from the app, with system diagnostics included in issue reports."
+        ]
+      }
+    ]
+  },
+  {
+    "version": "0.5.0",
+    "date": "2026-10-31",
+    "title": "A customizable workspace and project estimates",
+    "sections": [
+      {
+        "title": "Workspace and settings",
+        "changes": [
+          "Rearrange, dock, and float inspector panes, with independent scrolling and sticky section headers. Workspace layouts and control preferences are remembered across restarts.",
+          "Browse inspector information in full-width tables with aligned columns and remembered horizontal scrolling for wide catalogs.",
+          "Customize keyboard shortcuts in Settings and toggle the right sidebar with Tab.",
+          "Rename viewport tabs independently and restore saved project selections when reopening a project."
+        ]
+      },
+      {
+        "title": "Materials, finishes, and estimates",
+        "changes": [
+          "Create reusable stock material and surface treatment catalogs, assign them to model parts, and retain material definitions when copying and pasting.",
+          "Generate cutting plans from assigned stock materials.",
+          "Estimate material costs and finishing time from model surfaces, with configurable prices, currency, treatment steps, and per-part overrides."
+        ]
+      },
+      {
+        "title": "Modeling and display",
+        "changes": [
+          "Configure grid spacing and inference colors, and toggle edge and face snapping targets independently.",
+          "Use entity dimension gizmos and improved Push/Pull snapping for precise modeling.",
+          "The Outer Shell solid tool is now called Combine.",
+          "Improved dialog focus and cached scene meshes, Outliner data, and solid measurements for a smoother workspace."
+        ]
+      }
+    ]
+  },
+  {
+    "version": "0.4.0",
+    "date": "2026-10-28",
+    "title": "More views and precise measurements",
+    "sections": [
+      {
+        "title": "Views and navigation",
+        "changes": [
+          "Work with multiple viewport tabs and resizable split views, each with its own camera and a shared model, selection, and undo history.",
+          "Use the interactive compass to switch camera views, with viewport layouts and camera preferences remembered across restarts.",
+          "The grid stays anchored to the model while orbiting, and viewports use a cleaner borderless appearance.",
+          "Docking a viewport keeps the correct pane active so camera navigation affects the intended view."
+        ]
+      },
+      {
+        "title": "Measurements and drawing",
+        "changes": [
+          "Choose length, area, volume, and angle units with independent decimal precision in the new Units sidebar section. These preferences persist across restarts, and lengths entered without a unit use the selected length unit.",
+          "Enable Snap to grid to align drawing and placement with the grid spacing at the current zoom; the setting is remembered across restarts.",
+          "Line drawing stops automatically when a closed shape creates a face, and completed shapes clear their drawing guides.",
+          "Shape previews stay on their starting face during local-axis snapping and remain stable when following tilted reference points.",
+          "Solids with inset recesses now report their volume correctly and remain usable by solid tools."
+        ]
+      },
+      {
+        "title": "Workshop plans",
+        "changes": [
+          "Cut lists use consistent part ordering and preserve width and cutting direction for short parts aligned with other parts in the same group.",
+          "Cut lists and cutting layouts show clearer metric dimensions in millimeters or centimeters."
+        ]
+      }
+    ]
+  },
+  {
+    "version": "0.3.1",
+    "date": "2026-10-27",
+    "title": "Choose where browser projects are saved",
+    "sections": [
+      {
+        "title": "Browser saving",
+        "changes": [
+          "Save and Save As now let you choose a filename and location in supported browsers, remembering the last save directory and updating the model name after the file is written.",
+          "Browsers without file-system picker support continue to download project files using their download settings.",
+          "Cancelling the save picker leaves the project unchanged, and failed writes report an error without marking the project as saved."
+        ]
+      },
+      {
+        "title": "Editor",
+        "changes": [
+          "Starting a new project resets the camera angle and framing while preserving projection and field-of-view preferences."
+        ]
+      }
+    ]
+  },
+  {
+    "version": "0.3.0",
+    "date": "2026-10-27",
+    "title": "From models to workshop plans",
+    "sections": [
+      {
+        "title": "Plans and exports",
+        "changes": [
+          "Generate woodworking cut lists and suggested board or sheet layouts as PDFs, using selected parts or the whole visible project.",
+          "Export current and standard camera views as PNG, WebP, or PDF, with previews, paper sizes, resolution choices, and combined or separate views."
+        ]
+      },
+      {
+        "title": "Modeling and annotations",
+        "changes": [
+          "Attach editable text labels to model geometry, with labels following their attachment as the model changes.",
+          "Paint individual faces or all faces in a group or component, and see paint colors in Outliner icons.",
+          "Inset Push/Pull operations now leave recesses open instead of covering them with the original face.",
+          "Dimensions and text labels respect geometry depth, and orbiting uses visible geometry for more natural pivots."
+        ]
+      },
+      {
+        "title": "Editor and preferences",
+        "changes": [
+          "Search objects and control their visibility directly in the Outliner.",
+          "Tool choices, polygon sides, Move copy mode, axis locks, snapping options, group emphasis, searches, and export settings now persist across restarts.",
+          "Sidebars and the Outliner remember their scroll positions across restarts.",
+          "Dialogs use consistent layouts and action placement, grid contrast is tuned for light and dark themes, and context-menu checkboxes respond across the full row.",
+          "Offset now uses the F shortcut; Fit view remains available from its toolbar button."
+        ]
+      }
+    ]
+  },
+  {
+    "version": "0.2.2",
+    "date": "2026-10-26",
+    "title": "More ways to view and align your models",
+    "sections": [
+      {
+        "title": "Viewing and drawing",
+        "changes": [
+          "Switch between perspective and parallel projection, choose standard camera views, and adjust the field of view from the new View sidebar section.",
+          "Camera view preferences and the new sidebar sections persist across sessions.",
+          "Draw lines with improved axis alignment guides and toggle axis or plane locks from the toolbar."
+        ]
+      },
+      {
+        "title": "Editor",
+        "changes": [
+          "Browse release history offline from Help \u2192 Release notes, with new notes opening automatically once per release.",
+          "Use the Edit menu for shared selection commands, and expand or collapse an object's descendants from the Outliner context menu.",
+          "Identify Outliner entities with clearer icons and labels, and read keyboard shortcuts in a cleaner layout."
+        ]
+      },
+      {
+        "title": "Browser",
+        "changes": [
+          "App keyboard shortcuts now prevent conflicting browser actions while preserving clipboard commands and text entry.",
+          "The loading screen follows your saved theme or system color scheme."
+        ]
+      }
+    ]
+  },
+  {
+    "version": "0.2.1",
+    "date": "2026-10-25",
+    "title": "Smoother modeling and editor workflows",
+    "sections": [
+      {
+        "title": "Editor",
+        "changes": [
+          "Use shared context menus in the viewport and Outliner to work with objects and selections.",
+          "Drag and drop Outliner entries to reorganize groups and components.",
+          "Inspector preferences, section order, and docked or floating layouts now persist across sessions."
+        ]
+      },
+      {
+        "title": "Modeling",
+        "changes": [
+          "Solid tools support planar intersections and nested component operands."
+        ]
+      }
+    ]
+  },
+  {
+    "version": "0.2.0",
+    "date": "2026-10-25",
+    "title": "Precision drawing and a more capable editor",
+    "sections": [
+      {
+        "title": "Drawing and modeling",
+        "changes": [
+          "Enter precise measurements and use improved axis snapping and 3D inference.",
+          "Lock drawing planes while creating shapes.",
+          "Erase faces as well as edges, with improved dimension behavior."
+        ]
+      },
+      {
+        "title": "Editor",
+        "changes": [
+          "Find entities in the Outliner and commands in searchable keyboard shortcut help.",
+          "Switch to a dark theme with matching tool icons, clearer cursors, and improved face previews and shadows.",
+          "Opened projects use their file names, with clearer autosave recovery messages.",
+          "Try the browser editor from the new KetchUp3D website."
+        ]
+      }
+    ]
+  },
+  {
+    "version": "0.1.0",
+    "date": "2026-10-23",
+    "title": "The first KetchUp3D release",
+    "sections": [
+      {
+        "title": "Create and organize",
+        "changes": [
+          "Draw edges and planar faces with Line, Rectangle, Circle, Polygon, and Freehand tools and geometry snapping.",
+          "Shape geometry with Push/Pull, Scale, Offset, Move, Paint, and solid tools.",
+          "Measure models with Tape Measure, Protractor, and Dimensions.",
+          "Organize models with groups and components, a geometry clipboard, and undo and redo."
+        ]
+      },
+      {
+        "title": "Files and platforms",
+        "changes": [
+          "Save portable .ketchup projects with local autosave, import SketchUp .skp geometry, and export Wavefront .obj files.",
+          "Run the editor on Windows, macOS, Linux, or in a desktop browser."
+        ]
+      }
+    ]
+  }
+]
